@@ -10,7 +10,7 @@ public class Principal {
 		Integer vitoriaVisitante = 0;
 		for (int j=0; j<1; j++) {
 			Partida partida = new Partida();
-			Time time1 = partida.inicializaTimeMandante("AtlÃ©tico Mineiro", 7.0, 15000);
+			Time time1 = partida.inicializaTimeMandante("Atlético Mineiro", 7.0, 15000);
 			Time time2 = partida.inicializaTimeVisitante("Cruzeiro", 9.0, 28000);
 			switch (partida.realizaPartida(time1, time2, 90)) {
 				case 1: 
@@ -24,7 +24,7 @@ public class Principal {
 					break;
 			}
 		}
-		//System.out.println("VitÃ³rias Mandante: " + vitoriaMandante + " Empates: " + empate + " VitÃ³ria Visitante: " + vitoriaVisitante);
+		//System.out.println("Vitórias Mandante: " + vitoriaMandante + " Empates: " + empate + " Vitória Visitante: " + vitoriaVisitante);
 	}
 
 }

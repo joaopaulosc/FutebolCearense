@@ -21,12 +21,15 @@ import br.gov.efprototype.model.Evento;
 import br.gov.efprototype.model.Posicao;
 import br.gov.efprototype.model.TabelaModelo;
 import br.gov.efprototype.model.Time;
+import br.gov.efprototype.view.BatedorPenalti;
 
 public class Partida {
 	
 	private List<Evento> eventos= new ArrayList<Evento>();
-	List<Atleta> jogadoresTimeMandante = new ArrayList<Atleta>();
-	List<Atleta> jogadoresTimeVisitante = new ArrayList<Atleta>();
+	List<Atleta> jogadoresTitularesTimeMandante = new ArrayList<Atleta>();
+	List<Atleta> jogadoresSuplentesTimeMandante = new ArrayList<Atleta>();
+	List<Atleta> jogadoresTitularesTimeVisitante = new ArrayList<Atleta>();
+	List<Atleta> jogadoresSuplentesTimeVisitante = new ArrayList<Atleta>();
 	List<Atleta> jogadoresCartaoAmarelo = new ArrayList<Atleta>();
 	List<Atleta> jogadoresCartaoVermelho = new ArrayList<Atleta>();
 	private Atleta melhorJogadorRodada;
@@ -53,6 +56,7 @@ public class Partida {
 	private JLabel versus = new JLabel();
 	private JButton substituirMandante = new JButton();
 	private JButton substituirVisitante = new JButton();
+	private BatedorPenalti BatedorPenalti;
 	
 	private void inicializarPainelPrincipal(){
 		//progressBar.setValue(0);
@@ -201,56 +205,17 @@ public class Partida {
 			}
 		}
 	}
-	
-	private Atleta selecionaBatedor(Time time){
-		String[] colunas = new String[] { "Jogador", "Posi√ß√£o" ,"Qualidade" };    
-		ArrayList dados = new ArrayList();
-		
-		for (Atleta jogador: time.getJogadores()){
-			dados.add(new String[] { jogador.getNome(), jogador.getPosicao().toString() , jogador.getQualidadeAtaque().toString()});
-					
-		}
-		TabelaModelo tabela = new TabelaModelo(dados, colunas);
-		JFrame frame = new JFrame();
-		JPanel panel = new JPanel();
-		JLabel texto = new JLabel();
-		JTable tabelaJogadores = new JTable(tabela);
-		JButton confirmacao = new JButton();
-		texto.setText("Selecione o batedor:");
-		confirmacao.setText("Ok");
-		
-		
-		dimensao.setSize(400, 300);
-		frame.setPreferredSize(dimensao);
-		panel.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		
-		c.gridx = 0;
-		c.gridy = 0;
-		panel.add(texto, c);
-		
-		c.gridx = 0;
-		c.gridy = 1;
-		panel.add(tabelaJogadores, c);
-		
-		c.gridx = 0;
-		c.gridy = 2;
-		panel.add(confirmacao, c);
-		
-		frame.add(panel);
-		frame.pack();
-		frame.setVisible(true);
-		return null;
-	}
-	
+
 	private void verificaPenalti(boolean mandante, Double aproximacao, Time timeMandante,Time timeVisitante, Integer minuto){
 		if (aproximacao > 90.0) {
 			adicionarAcontecimentosMandante("Penalti - " + minuto);
-			Atleta batedor;
-			if (mandante)
-				batedor = selecionaBatedor(timeMandante);
-			else 
-				batedor = selecionaBatedor(timeVisitante);
+			Atleta batedorSelecionado;
+			if (mandante) {		
+				BatedorPenalti b = new BatedorPenalti(timeMandante);
+			}
+			else { 
+				BatedorPenalti b = new BatedorPenalti(timeVisitante);
+			}							
 			//System.out.println("Penalti - " + minuto);
 			Double chanceGol = getRandomArbitrary(1.0, 10.0); 
 			if (chanceGol >= 8.0){
@@ -380,80 +345,140 @@ public class Partida {
 		Time timeMandante = new Time(nomeTime, moral, capacidadeEstadio);
 		//Jogador 1
 		Atleta jogador1 = new Atleta("Victor", 8.0, 8.0, 10.0,Posicao.GOLEIRO, 32, Comportamento.Fair_Play);
-		jogadoresTimeMandante.add(jogador1);
+		jogadoresTitularesTimeMandante.add(jogador1);
 		//Jogador 2
 		Atleta jogador2 = new Atleta("Marcos Rocha", 8.0, 8.0, 10.0,Posicao.DEFESA, 26, Comportamento.Cavalheiro);
-		jogadoresTimeMandante.add(jogador2);
+		jogadoresTitularesTimeMandante.add(jogador2);
 		//Jogador 3
 		Atleta jogador3 = new Atleta("Leonardo Silva", 8.0, 8.0, 10.0,Posicao.DEFESA, 36, Comportamento.Sarrafeiro);
-		jogadoresTimeMandante.add(jogador3);
+		jogadoresTitularesTimeMandante.add(jogador3);
 		//Jogador 4
 		Atleta jogador4 = new Atleta("Jemerson", 8.0, 8.0, 10.0,Posicao.DEFESA, 22, Comportamento.Caneleiro);
-		jogadoresTimeMandante.add(jogador4);
+		jogadoresTitularesTimeMandante.add(jogador4);
 		//Jogador 5
 		Atleta jogador5 = new Atleta("Pedro Botelho", 8.0, 8.0, 10.0,Posicao.DEFESA, 25, Comportamento.Caneleiro);
-		jogadoresTimeMandante.add(jogador5);
+		jogadoresTitularesTimeMandante.add(jogador5);
 		//Jogador 6
 		Atleta jogador6 = new Atleta("Rafael Carioca", 8.0, 8.0, 10.0,Posicao.MEIOCAMPO, 26, Comportamento.Caceteiro);
-		jogadoresTimeMandante.add(jogador6);
+		jogadoresTitularesTimeMandante.add(jogador6);
 		//Jogador 7
-		Atleta jogador7 = new Atleta("Dod√¥", 8.0, 8.0, 10.0,Posicao.MEIOCAMPO, 20, Comportamento.Cavalheiro);
-		jogadoresTimeMandante.add(jogador7);
+		Atleta jogador7 = new Atleta("DodÙ", 8.0, 8.0, 10.0,Posicao.MEIOCAMPO, 20, Comportamento.Cavalheiro);
+		jogadoresTitularesTimeMandante.add(jogador7);
 		//Jogador 8
-		Atleta jogador8 = new Atleta("D√°tolo", 8.0, 8.0, 10.0,Posicao.MEIOCAMPO, 31, Comportamento.Caneleiro);
-		jogadoresTimeMandante.add(jogador8);
+		Atleta jogador8 = new Atleta("D·tolo", 8.0, 8.0, 10.0,Posicao.MEIOCAMPO, 31, Comportamento.Caneleiro);
+		jogadoresTitularesTimeMandante.add(jogador8);
 		//Jogador 9
 		Atleta jogador9 = new Atleta("Guilherme", 8.0, 8.0, 10.0,Posicao.MEIOCAMPO, 26, Comportamento.Cordeirinho);
-		jogadoresTimeMandante.add(jogador9);
+		jogadoresTitularesTimeMandante.add(jogador9);
 		//Jogador 10
 		Atleta jogador10 = new Atleta("Luan", 8.0, 8.0, 10.0,Posicao.ATACANTE, 25, Comportamento.Caneleiro);
-		jogadoresTimeMandante.add(jogador10);
+		jogadoresTitularesTimeMandante.add(jogador10);
 		//Jogador 11
 		Atleta jogador11 = new Atleta("Lucas Pratto", 8.0, 8.0, 10.0,Posicao.ATACANTE, 27, Comportamento.Cavalheiro);
-		jogadoresTimeMandante.add(jogador11);
+		jogadoresTitularesTimeMandante.add(jogador11);
 		
-		timeMandante.setJogadores(jogadoresTimeMandante);		
+		//Iniciando o banco de suplentes
+		//Jogador 12
+		Atleta jogador12 = new Atleta("Giovanni", 8.0, 8.0, 10.0,Posicao.GOLEIRO, 28, Comportamento.Cavalheiro);
+		jogadoresSuplentesTimeMandante.add(jogador12);
+		
+		//Jogador 13
+		Atleta jogador13 = new Atleta("Edcarlos", 8.0, 8.0, 10.0,Posicao.DEFESA, 30, Comportamento.Cavalheiro);
+		jogadoresSuplentesTimeMandante.add(jogador13);
+				
+		//Jogador 14
+		Atleta jogador14 = new Atleta("JosuÈ", 8.0, 8.0, 10.0,Posicao.MEIOCAMPO, 27, Comportamento.Cavalheiro);
+		jogadoresSuplentesTimeMandante.add(jogador14);
+		
+		//Jogador 15
+		Atleta jogador15 = new Atleta("Patric", 8.0, 8.0, 10.0,Posicao.DEFESA, 36, Comportamento.Cavalheiro);
+		jogadoresSuplentesTimeMandante.add(jogador15);
+		
+		//Jogador 16
+		Atleta jogador16 = new Atleta("Leandro Donizete", 8.0, 8.0, 10.0,Posicao.ATACANTE, 33, Comportamento.Cavalheiro);
+		jogadoresSuplentesTimeMandante.add(jogador16);
+		
+		//Jogador 17
+		Atleta jogador17 = new Atleta("Thiago Ribeiro", 8.0, 8.0, 10.0,Posicao.ATACANTE, 29, Comportamento.Cavalheiro);
+		jogadoresSuplentesTimeMandante.add(jogador17);
+		
+		//Jogador 18
+		Atleta jogador18 = new Atleta("Carlos", 8.0, 8.0, 10.0,Posicao.ATACANTE, 20, Comportamento.Cavalheiro);
+		jogadoresSuplentesTimeMandante.add(jogador18);
+				
+		timeMandante.setJogadoresTitulares(jogadoresTitularesTimeMandante);	
+		timeMandante.setJogadoresSuplentes(jogadoresSuplentesTimeMandante);
 		return timeMandante;
 	}
 	
 	public Time inicializaTimeVisitante(String nomeTime, Double moral, Integer capacidadeEstadio){
-		Time timeMandante = new Time(nomeTime, moral, capacidadeEstadio);		
+		Time timeVisitante = new Time(nomeTime, moral, capacidadeEstadio);		
 		//Jogador 1
-		Atleta jogador1 = new Atleta("F√°bio", 8.0, 8.0, 10.0,Posicao.GOLEIRO, 34, Comportamento.Fair_Play);
-		jogadoresTimeVisitante.add(jogador1);
+		Atleta jogador1 = new Atleta("F·bio", 8.0, 8.0, 10.0,Posicao.GOLEIRO, 34, Comportamento.Fair_Play);
+		jogadoresTitularesTimeVisitante.add(jogador1);
 		//Jogador 2
 		Atleta jogador2 = new Atleta("Mayke", 8.0, 8.0, 10.0,Posicao.DEFESA, 22, Comportamento.Caneleiro);
-		jogadoresTimeVisitante.add(jogador2);
+		jogadoresTitularesTimeVisitante.add(jogador2);
 		//Jogador 3
-		Atleta jogador3 = new Atleta("Paulo Andr√©", 8.0, 8.0, 10.0,Posicao.DEFESA, 31, Comportamento.Sarrafeiro);
-		jogadoresTimeVisitante.add(jogador3);
+		Atleta jogador3 = new Atleta("Paulo AndrÈ", 8.0, 8.0, 10.0,Posicao.DEFESA, 31, Comportamento.Sarrafeiro);
+		jogadoresTitularesTimeVisitante.add(jogador3);
 		//Jogador 4
 		Atleta jogador4 = new Atleta("Manoel", 8.0, 8.0, 10.0,Posicao.DEFESA, 25, Comportamento.Caceteiro);
-		jogadoresTimeVisitante.add(jogador4);
+		jogadoresTitularesTimeVisitante.add(jogador4);
 		//Jogador 5
 		Atleta jogador5 = new Atleta("Mena", 8.0, 8.0, 10.0,Posicao.DEFESA, 27, Comportamento.Caneleiro);
-		jogadoresTimeVisitante.add(jogador5);
+		jogadoresTitularesTimeVisitante.add(jogador5);
 		//Jogador 6
 		Atleta jogador6 = new Atleta("Willians", 8.0, 8.0, 10.0,Posicao.MEIOCAMPO, 29, Comportamento.Sarrafeiro);
-		jogadoresTimeVisitante.add(jogador6);
+		jogadoresTitularesTimeVisitante.add(jogador6);
 		//Jogador 7
 		Atleta jogador7 = new Atleta("Henrique", 8.0, 8.0, 10.0,Posicao.MEIOCAMPO, 30, Comportamento.Caneleiro);
-		jogadoresTimeVisitante.add(jogador7);
+		jogadoresTitularesTimeVisitante.add(jogador7);
 		//Jogador 8
 		Atleta jogador8 = new Atleta("Charles", 8.0, 8.0, 10.0,Posicao.MEIOCAMPO, 30, Comportamento.Caceteiro);
-		jogadoresTimeVisitante.add(jogador8);
+		jogadoresTitularesTimeVisitante.add(jogador8);
 		//Jogador 9
 		Atleta jogador9 = new Atleta("Alisson", 8.0, 8.0, 10.0,Posicao.MEIOCAMPO, 22, Comportamento.Cordeirinho);
-		jogadoresTimeVisitante.add(jogador9);
+		jogadoresTitularesTimeVisitante.add(jogador9);
 		//Jogador 10
 		Atleta jogador10 = new Atleta("Marinho", 8.0, 8.0, 10.0,Posicao.ATACANTE, 25, Comportamento.Caneleiro);
-		jogadoresTimeVisitante.add(jogador10);
+		jogadoresTitularesTimeVisitante.add(jogador10);
 		//Jogador 11
-		Atleta jogador11 = new Atleta("Leandro Dami√£o", 8.0, 8.0, 10.0,Posicao.ATACANTE, 26, Comportamento.Cavalheiro);
-		jogadoresTimeVisitante.add(jogador11);
+		Atleta jogador11 = new Atleta("Leandro Dami„o", 8.0, 8.0, 10.0,Posicao.ATACANTE, 26, Comportamento.Cavalheiro);
+		jogadoresTitularesTimeVisitante.add(jogador11);		
 		
-		timeMandante.setJogadores(jogadoresTimeVisitante);		
-		return timeMandante;
+		//Iniciando o banco de suplentes
+		//Jogador 12
+		Atleta jogador12 = new Atleta("Rafael", 8.0, 8.0, 10.0,Posicao.ATACANTE, 26, Comportamento.Cavalheiro);
+		jogadoresSuplentesTimeVisitante.add(jogador12);
+		
+		//Jogador 13
+		Atleta jogador13 = new Atleta("Bruno Rodrigo", 8.0, 8.0, 10.0,Posicao.DEFESA, 30, Comportamento.Cavalheiro);
+		jogadoresSuplentesTimeVisitante.add(jogador13);
+				
+		//Jogador 14
+		Atleta jogador14 = new Atleta("Cear·", 8.0, 8.0, 10.0,Posicao.DEFESA, 35, Comportamento.Cavalheiro);
+		jogadoresSuplentesTimeVisitante.add(jogador14);
+		
+		//Jogador 15
+		Atleta jogador15 = new Atleta("Eurico", 8.0, 8.0, 10.0,Posicao.ATACANTE, 21, Comportamento.Cavalheiro);
+		jogadoresSuplentesTimeVisitante.add(jogador15);
+		
+		//Jogador 16
+		Atleta jogador16 = new Atleta("Arrascaeta", 8.0, 8.0, 10.0,Posicao.MEIOCAMPO, 21, Comportamento.Cavalheiro);
+		jogadoresSuplentesTimeVisitante.add(jogador16);
+		
+		//Jogador 17
+		Atleta jogador17 = new Atleta("Joel", 8.0, 8.0, 10.0,Posicao.ATACANTE, 21, Comportamento.Cavalheiro);
+		jogadoresSuplentesTimeVisitante.add(jogador17);
+		
+		//Jogador 18
+		Atleta jogador18 = new Atleta("Marquinhos", 8.0, 8.0, 10.0,Posicao.ATACANTE, 25, Comportamento.Cavalheiro);
+		jogadoresSuplentesTimeVisitante.add(jogador18);
+		
+		timeVisitante.setJogadoresTitulares(jogadoresTitularesTimeVisitante);	
+		timeVisitante.setJogadoresSuplentes(jogadoresSuplentesTimeVisitante);
+		return timeVisitante;
 	}
 	
 	public Integer getOcupacaoEstadio(Time timeMandante, Time timeVisitante){
@@ -485,7 +510,7 @@ public class Partida {
 	}
 	
 	public Double getJogadaAtaque(Time time, Integer minutoRodada){
-		List<Atleta> jogadores = time.getJogadores();
+		List<Atleta> jogadores = time.getJogadoresTitulares();
 		Double jogadaTime = 0.0;
 		Double jogadaAtleta = 0.0;
 		Double melhorJogada = 0.0;		
@@ -506,7 +531,7 @@ public class Partida {
 	}
 	
 	public Double getJogadaDefesa(Time time, Integer minutoRodada){
-		List<Atleta> jogadores = time.getJogadores();
+		List<Atleta> jogadores = time.getJogadoresTitulares();
 		Double jogadaTime = 0.0;
 		Double jogadaAtleta = 0.0;
 		Double piorJoagada = 0.0;
@@ -562,11 +587,11 @@ public class Partida {
 		violencia = (getRandomArbitrary(1.0, 10.0) + fatorViolencia)/2;
 		if (violencia>9.0){
 			if (tipo == 'M') {
-				jogadoresTimeMandante.remove(jogador);
+				jogadoresTitularesTimeMandante.remove(jogador);
 				adicionarAcontecimentosMandante(jogador.getNome() + " - Vermelho - " + rodada + "'");
 			}
 			else {
-				jogadoresTimeVisitante.remove(jogador);
+				jogadoresTitularesTimeVisitante.remove(jogador);
 				adicionarAcontecimentosVisitante(jogador.getNome() + " - Vermelho - " + rodada + "'");
 			}
 			//System.out.println(jogador.getNome() + " - Vermelho - " + rodada + "'");
@@ -578,11 +603,11 @@ public class Partida {
 			if (jaPossuiAmarelo(jogador)){
 				//System.out.println(jogador.getNome() + " - Segundo Amarelo = Vermelho - " + rodada + "'");
 				if (tipo == 'M') {
-					jogadoresTimeMandante.remove(jogador);
+					jogadoresTitularesTimeMandante.remove(jogador);
 					adicionarAcontecimentosMandante(jogador.getNome() + " - Segundo Amarelo = Vermelho - " + rodada + "'");
 				}
 				else {
-					jogadoresTimeVisitante.remove(jogador);
+					jogadoresTitularesTimeVisitante.remove(jogador);
 					adicionarAcontecimentosVisitante(jogador.getNome() + " - Segundo Amarelo = Vermelho - " + rodada + "'");
 				}
 				//cartaoVermelho = true;
@@ -591,10 +616,10 @@ public class Partida {
 			}
 			else {
 				if (tipo == 'M') {
-					adicionarAcontecimentosMandante(jogador.getNome() + " - Cart√£o Amarelo - " + rodada + "'");
+					adicionarAcontecimentosMandante(jogador.getNome() + " - Cart„o Amarelo - " + rodada + "'");
 				} 
 				else {
-					adicionarAcontecimentosVisitante(jogador.getNome() + " - Cart√£o Amarelo - " + rodada + "'");
+					adicionarAcontecimentosVisitante(jogador.getNome() + " - Cart„o Amarelo - " + rodada + "'");
 				}
 				//cartaoAmarelo = true;				
 				jogadoresCartaoAmarelo.add(jogador);			
